@@ -2,11 +2,15 @@ package demo.minifly.com.newandroidframe.base;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.view.Window;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import demo.minifly.com.newandroidframe.tools.SharedPreferencesHelper;
 
 /**
  * author ：minifly
@@ -16,11 +20,13 @@ import java.lang.reflect.Method;
  */
 public class MyApplication extends Application {
     private static MyApplication instance;
+    public static SharedPreferencesHelper sp = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        sp = new SharedPreferencesHelper(this);
     }
 
 
@@ -34,6 +40,27 @@ public class MyApplication extends Application {
         setMiuiStatusBarDarkMode(activity, isDark);
     }
 
+
+    // 获取版本名
+    public String getVersionName() {
+        PackageManager packageManager = getPackageManager();
+        PackageInfo packageInfo;
+        String versionName = "";
+        try {
+            packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            versionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
+
+    /**
+     * 小米状态栏定制
+     * @param activity
+     * @param darkmode
+     * @return
+     */
     private boolean setMiuiStatusBarDarkMode(Activity activity, boolean darkmode) {
         try {
             Class<? extends Window> clazz = activity.getWindow().getClass();
@@ -50,6 +77,12 @@ public class MyApplication extends Application {
         return false;
     }
 
+    /**
+     * 魅族的状态栏定制
+     * @param activity
+     * @param dark
+     * @return
+     */
     private boolean setMeizuStatusBarDarkIcon(Activity activity, boolean dark) {
         boolean result = false;
         if (activity != null) {

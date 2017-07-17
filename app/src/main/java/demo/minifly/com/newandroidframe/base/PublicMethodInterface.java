@@ -8,8 +8,12 @@ package demo.minifly.com.newandroidframe.base;
  */
 interface PublicMethodInterface {
     /**
-     * 必须自己调用deskactivity中的settitle方法。
+     * 必须重写settitle方法
      */
     void setTitle();
+
+    /**
+     * 数据处理方法
+     */
     void requestDatas();
 }

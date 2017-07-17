@@ -20,16 +20,31 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+/**
+ * 当前产生了
+ * tempimages 临时图片文件夹
+ * images  图片文件夹
+ * apks    应用apk文件夹
+ * record  录音文件夹
+ *
+ */
+
 public class FileUtils {
-	private String SDPATH = null;
+	private String SDPATH =  Environment.getExternalStorageDirectory()+"/";
+	private static String MAIN_DIR = "minifly";
+
+    private String apkPath = getSDPATH() + MAIN_DIR + File.separator + "apks" + File.separator;
+    private String recordPath = getSDPATH() + MAIN_DIR + File.separator + "records" + File.separator;
+    private String imagePath =  getSDPATH() + MAIN_DIR + File.separator + "images" + File.separator;
+    private String tempImagePath =getSDPATH() + MAIN_DIR + File.separator + "tempImages" + File.separator;
 	
 	public FileUtils() {
 		// 初始化当前SD卡的路径
-		SDPATH = Environment.getExternalStorageDirectory()+"/";
+//		SDPATH = Environment.getExternalStorageDirectory()+"/";
 	}
 	
 	// 得到当前SD卡的路径
-	public String getSDPATH() {
+	public  String getSDPATH() {
 		return SDPATH;
 	}
 	
@@ -64,7 +79,7 @@ public class FileUtils {
 	}	
 
 	public File getApkPath() {
-		File file = new File(getSDPATH() + "wangcang/apks/");
+		File file = new File(apkPath);
 		if (file.exists()) {
 			return file;
 		}
@@ -77,7 +92,9 @@ public class FileUtils {
 	/**
 	 * 录音文件夹
 	 */
-	public File getRecordPath(){File file = new File(getSDPATH() + "wangcang/record");
+	public File getRecordPath(){
+
+        File file = new File(recordPath);
 		if (file.exists()) {
 			return file;
 		}
@@ -88,39 +105,52 @@ public class FileUtils {
 	}
 
 	public File getRecordFile(String name){
-		File file = new File(getSDPATH() + "wangcang/record/" + name);
+		File file = new File(recordPath , name);
 		if (file.exists()) {
 			return file;
 		}
 		else {
-			file.mkdirs();
+			file.getParentFile().mkdirs();
 			return file;
 		}
 	}
 
 	public File getApkFile(String name) {
-		File file = new File(getSDPATH() + "wangcang/apks/" + name);
+		File file = new File(apkPath ,name);
 		if (file.exists()) {
 			return file;
-		}
-		else {
-			file.mkdirs();
+		}else {
+			file.getParentFile().mkdirs();
 			return file;
 		}
 	}
 
 	public File getImagesFile(String fileName) {
-		return new File(getSDPATH() + "wangcang/images/" + fileName);
+
+		File file = new File(imagePath,fileName);
+		if (file.exists()) {
+			return file;
+		}else {
+			file.getParentFile().mkdirs();
+			return file;
+		}
+
 	}
 
 	public File getImagesTempFile(String fileName) {
-		return new File(getSDPATH() + "wangcang/tempImages/" + fileName);
+		File file = new File(tempImagePath,fileName);
+		if (file.exists()) {
+			return file;
+		}else {
+			file.getParentFile().mkdirs();
+			return file;
+		}
 	}
 
 	// 删除由于压缩上传图片产生的临时文件
 	public void deleteTempImage() {
 		try {
-			File dir = new File(getSDPATH() + "wangcang/tempImages/");
+			File dir = new File(tempImagePath);
 			if (dir.exists()) {
 				File[] files = dir.listFiles();
 				for (int i = 0; i < files.length; i++) {
@@ -219,9 +249,10 @@ public class FileUtils {
 	}
 
 	// 删除小于1000字节的文件
+    //临时文件的操作。
 	public void check_cache() {
 		try {
-			File filesDir = new File(getSDPATH() + "wangcang/imgcache/");
+			File filesDir = new File(tempImagePath);
 			File files[] = filesDir.listFiles();
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].length() < 1000) {
@@ -288,21 +319,28 @@ public class FileUtils {
 	}
 	
 	// 清除缓存，但不删除文件夹
+    //四个文件夹的清空。
 	public void cleanCache() {
 		try {
-			File file = new File("/mnt/sdcard/toomao/header/");
+			File file = new File(apkPath);
 			File[] fs = file.listFiles();
 			for (int i = 0; i < fs.length; i++) {
 				fs[i].delete();
 			}
 			
-			file = new File("/mnt/sdcard/toomao/imgcache/");
+			file = new File(tempImagePath);
 			fs = file.listFiles();
 			for (int i = 0; i < fs.length; i++) {
 				fs[i].delete();
 			}
 			
-			file = new File("/mnt/sdcard/toomao/cameraimage/");
+			file = new File(imagePath);
+			fs = file.listFiles();
+			for (int i = 0; i < fs.length; i++) {
+				fs[i].delete();
+			}
+
+			file = new File(recordPath);
 			fs = file.listFiles();
 			for (int i = 0; i < fs.length; i++) {
 				fs[i].delete();
@@ -313,9 +351,14 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * 保存到系统的相册里面
+	 * @param context
+	 * @param bmp
+	 */
 	public void saveImageToGallery(Context context, Bitmap bmp) {
 		// 首先保存图片
-		File appDir = new File(getSDPATH() + "toomao/images");
+		File appDir = new File(imagePath);
 		if (!appDir.exists()) {
 			appDir.mkdirs();
 		}
@@ -339,7 +382,7 @@ public class FileUtils {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		String path = getSDPATH() + "toomao/images/" + fileName;
+		String path = imagePath + fileName;
 		// 最后通知图库更新
 		context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
 	}
