@@ -3,7 +3,7 @@ package demo.minifly.com.newandroidframe.annotation.eventbus;
 import de.greenrobot.event.EventBus;
 
 /**
- * Created by feng.gao on 2017/11/2.
+ * Created by minifly on 2017/11/2.
  * eventBus统一管理
  */
 

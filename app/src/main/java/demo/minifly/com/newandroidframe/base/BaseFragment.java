@@ -1,16 +1,18 @@
 package demo.minifly.com.newandroidframe.base;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.ClipboardManager;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -18,14 +20,38 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import demo.minifly.com.newandroidframe.R;
+import demo.minifly.com.newandroidframe.annotation.BindEventBus;
+import demo.minifly.com.newandroidframe.annotation.eventbus.EventManager;
+import demo.minifly.com.newandroidframe.tools.ProgressDialogUtils;
 import demo.minifly.com.newandroidframe.tools.SharedPreferencesHelper;
 import demo.minifly.com.newandroidframe.tools.ToastUtils;
 
 public abstract class BaseFragment extends Fragment implements PublicMethodInterface{
-    public SharedPreferencesHelper sp;
-    public Activity mActivity;
-    public ProgressDialog mProgressDialog;
+    protected SharedPreferencesHelper sp;
+    protected Activity mActivity;
     IntentFilter filter;
+    protected ProgressDialogUtils progressDialogUtils;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+            EventManager.register(this);
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    /**
+     *eventbus的注册与反注册问题
+     * 1.oncreate注册
+     * if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+     EventManager.register(this);
+     }
+     * 2.ondesdroy的反注册
+     * if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+     EventManager.unregister(this);
+     }
+     */
 
     @Override
     public void onAttach(Context context) {
@@ -46,6 +72,9 @@ public abstract class BaseFragment extends Fragment implements PublicMethodInter
     public void onDestroy() {
         super.onDestroy();
         // 退出时统一释放资源
+        if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+            EventManager.unregister(this);
+        }
     }
 
     @Override
@@ -54,13 +83,15 @@ public abstract class BaseFragment extends Fragment implements PublicMethodInter
         setTitle();
     }
 
-    // 代替findViewById
+    /**
+     * 代替findViewById
+      */
     public <T extends View> T findView(View v, int id) {
         return (T) v.findViewById(id);
     }
 
 
-    // 弹出Toast
+    /* 弹出Toast */
     public void toastAtTop(final String msg) {
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -219,37 +250,29 @@ public abstract class BaseFragment extends Fragment implements PublicMethodInter
     }
 
     // 显示ProgressDialog
-    public void showProgressDialog(String text) {
-        if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-            mProgressDialog = new ProgressDialog(mActivity);
-            mProgressDialog.setMessage(text);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-        }
+    public void showProgressDialog() {
+        progressDialogUtils = ProgressDialogUtils.show(mActivity);
     }
 
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(mActivity);
-        } else if (mProgressDialog.isShowing()) {
-            return;
-        }
-        mProgressDialog.setMessage("请求中");
-        mProgressDialog.show();
+    // 显示ProgressDialog
+    public void showProgressDialog(String text) {
+        progressDialogUtils = ProgressDialogUtils.show(mActivity,text);
     }
 
     // 隐藏ProgressDialog
     public void dismissProgressDialog() {
-        try {
-            if (mProgressDialog != null) {
-                if (mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-            }
-        } catch (Exception e) {
-			e.printStackTrace();
+        if (progressDialogUtils != null &&  progressDialogUtils.isShowing()) {
+            progressDialogUtils.dismiss();
         }
     }
+
+    //改变progress上文字
+    public void setProgressDialogText(String text){
+        if (progressDialogUtils != null){
+            progressDialogUtils.setTextHint(text);
+        }
+    }
+
 
     //获取随机数， 参数为返回随机数的长度
     public String generateRandomString(int length) {

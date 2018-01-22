@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public class Common {
     private static Common instance;
     private boolean bluetoothState;
+    // Activity栈  activity栈管理
+    private static ArrayList<Activity> activityList;
+
 
     // 获取单例
     public static Common getInstance() {
@@ -31,9 +34,6 @@ public class Common {
     public String getCaptureWhere() {
         return captureWhere;
     }
-
-    // Activity栈
-    private static ArrayList<Activity> activityList;
 
     // 把Activity添加进栈
     public void addActivity(Activity activity) {

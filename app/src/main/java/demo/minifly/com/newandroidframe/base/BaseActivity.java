@@ -2,7 +2,6 @@ package demo.minifly.com.newandroidframe.base;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -22,13 +21,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import demo.minifly.com.newandroidframe.R;
+import demo.minifly.com.newandroidframe.annotation.BindEventBus;
+import demo.minifly.com.newandroidframe.annotation.eventbus.EventManager;
+import demo.minifly.com.newandroidframe.tools.ProgressDialogUtils;
 import demo.minifly.com.newandroidframe.tools.SharedPreferencesHelper;
 import demo.minifly.com.newandroidframe.tools.ToastUtils;
 
 public class BaseActivity extends AppCompatActivity{
     public SharedPreferencesHelper sp = null;
     public Context mContext;
-    ProgressDialog mProgressDialog = null;
+    protected  ProgressDialogUtils progressDialogUtils = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class BaseActivity extends AppCompatActivity{
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
         mContext = this;
 
         try {
@@ -53,12 +56,18 @@ public class BaseActivity extends AppCompatActivity{
         catch (Exception e) {
 
         }
+
+        if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+            EventManager.register(this);
+        }
     }
 
+    @Override
     public void onResume() {
         super.onResume();
     }
 
+    @Override
     public void onPause() {
         super.onPause();
     }
@@ -67,6 +76,9 @@ public class BaseActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         Common.getInstance().removeActivity(this);
+        if (this.getClass().isAnnotationPresent(BindEventBus.class)) {
+            EventManager.unregister(this);
+        }
     }
 
     // 代替findViewById
@@ -205,8 +217,9 @@ public class BaseActivity extends AppCompatActivity{
 
     public void finishActivityForResult(int resultCode, Bundle bundle) {
         Intent intent1 = new Intent();
-        if (bundle != null)
+        if (bundle != null) {
             intent1.putExtras(bundle);
+        }
         setResult(resultCode, intent1);
         finish();
         overridePendingTransition(R.anim.comm_scale_in, R.anim.comm_slide_out_to_right);
@@ -252,21 +265,29 @@ public class BaseActivity extends AppCompatActivity{
     }
 
     // 显示ProgressDialog
+    public void showProgressDialog() {
+        progressDialogUtils = ProgressDialogUtils.show(mContext);
+    }
+
+    // 显示ProgressDialog
     public void showProgressDialog(String text) {
-        if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-            mProgressDialog = new ProgressDialog(mContext);
-            mProgressDialog.setMessage(text);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-        }
+        progressDialogUtils = ProgressDialogUtils.show(mContext,text);
     }
 
     // 隐藏ProgressDialog
     public void dismissProgress() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+        if (progressDialogUtils != null && progressDialogUtils.isShowing()) {
+            progressDialogUtils.dismiss();
         }
     }
+
+    //改变progress上文字
+    public void setProgressDialogText(String text){
+        if (progressDialogUtils != null){
+            progressDialogUtils.setTextHint(text);
+        }
+    }
+
 
     public Display getScreenParams() {
         WindowManager windowManager = getWindowManager();

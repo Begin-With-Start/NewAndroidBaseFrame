@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">安卓框架</string>
+    <string name="common_string_lodding">加载中...</string>
 </resources>

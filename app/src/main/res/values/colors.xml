@@ -19,6 +19,8 @@
     <color name="common_color_c13_ececec">#ececec</color>
     <color name="common_color_c14_e5e9ee">#e5e9ee</color>
     <color name="common_color_c1cur_0869c2">#0869c2</color>
+
+    <color name="common_color_c7_96999e">#96999e</color>
     <color name="common_color_c3cur_f0880a">#f0880a</color>
 
     <!--自定义的view颜色-->

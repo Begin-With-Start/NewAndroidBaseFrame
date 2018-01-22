@@ -1,15 +1,16 @@
 package demo.minifly.com.newandroidframe.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import demo.minifly.com.newandroidframe.R;
+import demo.minifly.com.newandroidframe.annotation.BindEventBus;
+import demo.minifly.com.newandroidframe.base.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+@BindEventBus
+public class MainActivity extends BaseActivity {
 
 
     @BindView(R.id.main_activity_txtid)
@@ -20,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.main_activity_txtid)
     public void onClick() {
 
     }
+
 }
