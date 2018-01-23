@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -30,6 +32,7 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         sp = new SharedPreferencesHelper(this);
+        Log.d("Framework", "oncreate");
     }
 
 
@@ -43,6 +46,32 @@ public class MyApplication extends Application {
         setMiuiStatusBarDarkMode(activity, isDark);
     }
 
+    @Override
+    public void onTerminate() {
+        // 程序终止的时候执行
+        Log.d("Framework", "onTerminate");
+        super.onTerminate();
+    }
+
+    @Override
+    public void onLowMemory() {
+        // 低内存的时候执行
+        Log.d("Framework", "onLowMemory");
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        // 程序在内存清理的时候执行
+        Log.d("Framework", "onTrimMemory");
+        super.onTrimMemory(level);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.d("Framework", "onConfigurationChanged");
+        super.onConfigurationChanged(newConfig);
+    }
 
     // 获取版本名
     public String getVersionName() {
