@@ -39,8 +39,8 @@ public class ApplicationInitializer {
 
     /**
      * 初始化一些必须在主线程中初始化的东西
-     * 图片服务的加载
-     * 百度统计/bugly等等
+     * 1.图片服务的加载
+     * 2.百度统计/bugly等等
      */
     private synchronized static void init(Application application) {
         // ImageLoaderConfiguration config = new
@@ -53,6 +53,7 @@ public class ApplicationInitializer {
         // // .writeDebugLogs()//
         // .build();
         // ImageLoader.getInstance().init(config);
+        
         initialized.set(true);
     }
 

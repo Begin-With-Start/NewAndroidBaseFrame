@@ -40,6 +40,11 @@ public class ManageApplication extends MultiDexApplication {
     }
 
 
+    /**
+     * 状态栏定制，兼容
+     * @param activity
+     * @param isDark
+     */
     public void setStatusDark(Activity activity, boolean isDark) {
         setMeizuStatusBarDarkIcon(activity, isDark);
         setMiuiStatusBarDarkMode(activity, isDark);
