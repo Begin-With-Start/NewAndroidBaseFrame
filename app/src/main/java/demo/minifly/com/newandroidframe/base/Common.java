@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Common {
     private static Common instance;
-    private boolean bluetoothState;
     // Activity栈  activity栈管理
     private static ArrayList<Activity> activityList;
 
@@ -73,17 +72,6 @@ public class Common {
         } else {
             return false;
         }
-    }
-
-    /**
-     * 获取、保存蓝牙状态
-     * @return
-     */
-    public boolean getBluetoothState() {
-        return false;
-    }
-    public void setBluetoothState(boolean bluetoothState) {
-        this.bluetoothState = bluetoothState;
     }
 
 }
