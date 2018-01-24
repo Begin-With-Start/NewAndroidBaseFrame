@@ -23,6 +23,7 @@ import java.util.Random;
 import demo.minifly.com.newandroidframe.R;
 import demo.minifly.com.newandroidframe.annotation.BindEventBus;
 import demo.minifly.com.newandroidframe.annotation.eventbus.EventManager;
+import demo.minifly.com.newandroidframe.application.MainApplication;
 import demo.minifly.com.newandroidframe.tools.ProgressDialogUtils;
 import demo.minifly.com.newandroidframe.tools.SharedPreferencesHelper;
 import demo.minifly.com.newandroidframe.tools.ToastUtils;
@@ -51,7 +52,7 @@ public class BaseActivity extends AppCompatActivity{
 
         try {
             // 设置小米和魅族手机的状态栏变灰
-            MyApplication.getApplicationInstance().setStatusDark(this, true);
+            MainApplication.getApplicationInstance().setStatusDark(this, true);
         }
         catch (Exception e) {
 

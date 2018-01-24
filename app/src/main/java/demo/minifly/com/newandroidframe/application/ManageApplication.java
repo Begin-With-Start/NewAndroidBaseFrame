@@ -1,10 +1,10 @@
-package demo.minifly.com.newandroidframe.base;
+package demo.minifly.com.newandroidframe.application;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,10 +21,10 @@ import demo.minifly.com.newandroidframe.tools.SharedPreferencesHelper;
  * desc: application自定义
  * 注意：1.不能缓存数据，app到后台之后，会重新创建application，数据会被初始化。
  *      2.执行顺序  构造函数，attachbasecontext，oncreate·
- *
+ *      3.继承链
  */
-public class MyApplication extends Application {
-    private static MyApplication instance;
+public class ManageApplication extends MultiDexApplication {
+    protected static ManageApplication instance;
     public static SharedPreferencesHelper sp = null;
 
     @Override
@@ -35,8 +35,7 @@ public class MyApplication extends Application {
         Log.d("Framework", "oncreate");
     }
 
-
-    public static MyApplication getApplicationInstance(){
+    public static ManageApplication getApplicationInstance(){
         return instance;
     }
 

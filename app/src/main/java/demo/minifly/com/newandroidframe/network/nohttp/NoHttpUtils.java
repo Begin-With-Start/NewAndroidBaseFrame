@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import demo.minifly.com.newandroidframe.base.MyApplication;
+import demo.minifly.com.newandroidframe.application.MainApplication;
 import demo.minifly.com.newandroidframe.bean.CommonClass;
 import demo.minifly.com.newandroidframe.constant.Constant;
 import demo.minifly.com.newandroidframe.tools.LogUtils;
@@ -45,7 +45,7 @@ public class NoHttpUtils {
     private static final int REQUEST_FINISH = 2;   //请求完成
 
     public static Request<byte[]> getByteRequest(String url, Map params, RequestMethod requestMethod) {
-        String env = MyApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
+        String env = MainApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
 
         if (Constant.ENV_DEV.equals(env)) {
             mBaseUrl = Constant.URL_BASE_DEV;
@@ -81,7 +81,7 @@ public class NoHttpUtils {
         Request<byte[]> request = NoHttp.createByteArrayRequest(uriString, requestMethod);
 
         //添加头信息
-        String token = MyApplication.sp.getValue(Constant.sp_Token);
+        String token = MainApplication.sp.getValue(Constant.sp_Token);
 
         //auth_token必须传，不能为""，先随便写一个值
         if (!TextUtils.isEmpty(token)) {
@@ -93,7 +93,7 @@ public class NoHttpUtils {
         request.addHeader("sign", "");
         request.addHeader("version", "1.0"); //服务端api版本
         request.addHeader("charset", "UTF-8");
-        request.addHeader("w_appid", "wh_android_" + MyApplication.getApplicationInstance().getVersionName());  //客户端版本描述
+        request.addHeader("w_appid", "wh_android_" + MainApplication.getApplicationInstance().getVersionName());  //客户端版本描述
 
 //        request.setDefineRequestBodyForJson(jsonString); // 添加参数
         request.setConnectTimeout(10 * 1000); // 设置连接超时
@@ -106,7 +106,7 @@ public class NoHttpUtils {
     private static Request<String> getRequest(String url, Map params, RequestMethod requestMethod) {
         Map map = new HashMap();
 
-        String versionName = MyApplication.getApplicationInstance().getVersionName();
+        String versionName = MainApplication.getApplicationInstance().getVersionName();
 
         if (requestMethod == RequestMethod.POST) {
             url = url + "?t=" + System.currentTimeMillis() + "&w_appid=" + "wh_android_" + versionName;
@@ -131,7 +131,7 @@ public class NoHttpUtils {
         Request<String> request = NoHttp.createStringRequest(url, requestMethod);
 
         //添加头信息
-        String token = MyApplication.sp.getValue(Constant.sp_Token);
+        String token = MainApplication.sp.getValue(Constant.sp_Token);
 
         //auth_token必须传，不能为""，先随便写一个值
         if (!TextUtils.isEmpty(token)) {
@@ -143,7 +143,7 @@ public class NoHttpUtils {
         request.addHeader("sign", "");
         request.addHeader("version", "1.0"); //服务端api版本
         request.addHeader("charset", "UTF-8");
-        request.addHeader("w_appid", "wh_android_" + MyApplication.getApplicationInstance().getVersionName());  //客户端版本描述
+        request.addHeader("w_appid", "wh_android_" + MainApplication.getApplicationInstance().getVersionName());  //客户端版本描述
 
         request.setDefineRequestBodyForJson(jsonString); // 添加参数
         request.setConnectTimeout(10 * 1000); // 设置连接超时
@@ -185,7 +185,7 @@ public class NoHttpUtils {
     // Get请求
     public static void httpGet(final String url, final Map params, final OnResponseListener responseListener, final int w) {
 
-        String env = MyApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
+        String env = MainApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
 
         if (Constant.ENV_DEV.equals(env)) {
             mBaseUrl = Constant.URL_BASE_DEV;
@@ -234,7 +234,7 @@ public class NoHttpUtils {
             }
         };
 
-        if (NetUtils.isHttpConnected(MyApplication.getApplicationInstance())) {
+        if (NetUtils.isHttpConnected(MainApplication.getApplicationInstance())) {
             ThreadUtils.newThread(new Runnable() {
                 @Override
                 public void run() {
@@ -276,7 +276,7 @@ public class NoHttpUtils {
     // Get请求
     public static void httpPost(final String url, final Map params, final OnResponseListener responseListener, final int w) {
 
-        String env = MyApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
+        String env = MainApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
 
         if (Constant.ENV_DEV.equals(env)) {
             mBaseUrl = Constant.URL_BASE_DEV;
@@ -325,7 +325,7 @@ public class NoHttpUtils {
             }
         };
 
-        if (NetUtils.isHttpConnected(MyApplication.getApplicationInstance())) {
+        if (NetUtils.isHttpConnected(MainApplication.getApplicationInstance())) {
             ThreadUtils.newThread(new Runnable() {
                 @Override
                 public void run() {
@@ -400,7 +400,7 @@ public class NoHttpUtils {
     public static void httpUploadFileRequest(String url, List<String> fileList, OnFileUploadListener onFileUploadListener, final OnFileUploadResultListener onFileUploadResultListener) {
         mOnFileUploadListener = onFileUploadListener;
 
-        String env = MyApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
+        String env = MainApplication.sp.getValue(Constant.sp_Env, Constant.ENV_DEFAULT);
 
         if (Constant.ENV_DEV.equals(env)) {
             mBaseUrl = Constant.URL_BASE_DEV;

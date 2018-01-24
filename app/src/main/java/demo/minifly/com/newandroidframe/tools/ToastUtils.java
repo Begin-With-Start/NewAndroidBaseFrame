@@ -3,7 +3,7 @@ package demo.minifly.com.newandroidframe.tools;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import demo.minifly.com.newandroidframe.base.MyApplication;
+import demo.minifly.com.newandroidframe.application.MainApplication;
 import demo.minifly.com.newandroidframe.custom_view.CustomToast;
 
 
@@ -15,29 +15,29 @@ public class ToastUtils {
 
 	public static void showToastAtTop(String text) {
 		if (text != null) {
-			CustomToast.makeText(MyApplication.getApplicationInstance(), text, Toast.LENGTH_SHORT).setGravity(Gravity.TOP, 0, ConvertUtils.dip2px(MyApplication.getApplicationInstance(), 90)).show();
+			CustomToast.makeText(MainApplication.getApplicationInstance(), text, Toast.LENGTH_SHORT).setGravity(Gravity.TOP, 0, ConvertUtils.dip2px(MainApplication.getApplicationInstance(), 90)).show();
 		}
 	}
 
 	public static void showToastAtTop(int resource) {
-		CustomToast.makeText(MyApplication.getApplicationInstance(), resource, Toast.LENGTH_SHORT).setGravity(Gravity.TOP, 0, ConvertUtils.dip2px(MyApplication.getApplicationInstance(), 90)).show();
+		CustomToast.makeText(MainApplication.getApplicationInstance(), resource, Toast.LENGTH_SHORT).setGravity(Gravity.TOP, 0, ConvertUtils.dip2px(MainApplication.getApplicationInstance(), 90)).show();
 	}
 
 	public static void showToast(String text) {
 		if (text != null) {
-			Toast.makeText(MyApplication.getApplicationInstance(), text, Toast.LENGTH_SHORT).show();
+			Toast.makeText(MainApplication.getApplicationInstance(), text, Toast.LENGTH_SHORT).show();
 		}
 	}
 
 
 	public static void showToast(int resource) {
-		Toast.makeText(MyApplication.getApplicationInstance(), resource, Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainApplication.getApplicationInstance(), resource, Toast.LENGTH_SHORT).show();
 	}
 
 
 	public static void toastError(String error) {
 		if (error != null) {
-			Toast.makeText(MyApplication.getApplicationInstance(), error, Toast.LENGTH_SHORT).show();
+			Toast.makeText(MainApplication.getApplicationInstance(), error, Toast.LENGTH_SHORT).show();
 		}
 	}
 

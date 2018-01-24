@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 /**
  * 获得屏幕相关的辅助类
- *
+ * 宽高，屏幕截图 ， 状态栏高.
  * @author zhy
  */
 public class ScreenUtils {
